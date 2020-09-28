@@ -81,6 +81,13 @@ namespace BlogsConsole
                     {
                         // delete blog
                         Console.WriteLine("Choose the blog to delete:");
+                        var db = new BloggingContext();
+                        var blog = GetBlog(db);
+                        if (blog != null)
+                        {
+                            // TODO: delete blog
+                            logger.Info($"Blog (id: {blog.BlogId}) deleted");
+                        }
                     }
                     Console.WriteLine();
                 } while (choice.ToLower() != "q");
@@ -91,6 +98,26 @@ namespace BlogsConsole
             }
 
             logger.Info("Program ended");
+        }
+
+        public static Blog GetBlog(BloggingContext db)
+        {
+            // display all blogs
+            var blogs = db.Blogs.OrderBy(b => b.BlogId);
+            foreach (Blog b in blogs)
+            {
+                Console.WriteLine($"{b.BlogId}: {b.Name}");
+            }
+            if (int.TryParse(Console.ReadLine(), out int BlogId))
+            {
+                Blog blog = db.Blogs.FirstOrDefault(b => b.BlogId == BlogId);
+                if (blog != null)
+                {
+                    return blog;
+                }
+            }
+            logger.Error("Invalid Blog Id");
+            return null;
         }
     }
 }
