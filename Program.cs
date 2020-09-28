@@ -23,6 +23,7 @@ namespace BlogsConsole
                     Console.WriteLine("Enter your selection:");
                     Console.WriteLine("1) Display all blogs");
                     Console.WriteLine("2) Add Blog");
+                    Console.WriteLine("5) Delete Blog");
                     Console.WriteLine("Enter q to quit");
                     choice = Console.ReadLine();
                     Console.Clear();
@@ -75,6 +76,11 @@ namespace BlogsConsole
                                 logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
                             }
                         }
+                    }
+                    else if (choice == "5")
+                    {
+                        // delete blog
+                        Console.WriteLine("Choose the blog to delete:");
                     }
                     Console.WriteLine();
                 } while (choice.ToLower() != "q");
