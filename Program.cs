@@ -24,6 +24,7 @@ namespace BlogsConsole
                     Console.WriteLine("1) Display all blogs");
                     Console.WriteLine("2) Add Blog");
                     Console.WriteLine("5) Delete Blog");
+                    Console.WriteLine("6) Edit Blog");
                     Console.WriteLine("Enter q to quit");
                     choice = Console.ReadLine();
                     Console.Clear();
@@ -88,6 +89,17 @@ namespace BlogsConsole
                             // delete blog
                             db.DeleteBlog(blog);
                             logger.Info($"Blog (id: {blog.BlogId}) deleted");
+                        }
+                    }
+                    else if (choice == "6")
+                    {
+                        // edit blog
+                        Console.WriteLine("Choose the blog to edit:");
+                        var db = new BloggingContext();
+                        var blog = GetBlog(db);
+                        if (blog != null)
+                        {
+                            // TODO: input blog
                         }
                     }
                     Console.WriteLine();
