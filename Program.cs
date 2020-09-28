@@ -85,7 +85,8 @@ namespace BlogsConsole
                         var blog = GetBlog(db);
                         if (blog != null)
                         {
-                            // TODO: delete blog
+                            // delete blog
+                            db.DeleteBlog(blog);
                             logger.Info($"Blog (id: {blog.BlogId}) deleted");
                         }
                     }
