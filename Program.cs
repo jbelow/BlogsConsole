@@ -14,64 +14,94 @@ namespace BlogsConsole
             logger.Info("Program started");
 
             int choice = 0;
-            
-            
+
+
             var db = new BloggingContext();
 
-            while (choice != -1){
+            while (choice != -1)
+            {
                 Console.WriteLine("1) Display all blogs \n2) Add Blog \n3) Create Post \n4) Display Posts\n-1) exit the program");
                 choice = Int32.Parse(Console.ReadLine());
 
 
                 switch (choice)
-            {
-                case 1:
-                    // Display all Blogs from the database
-                    var query = db.Blogs.OrderBy(b => b.Name);
+                {
+                    case 1:
+                        Console.WriteLine("All blogs in the database:");
+                        DisplayBlogs(db);
 
-                    Console.WriteLine("All blogs in the database:");
-                    foreach (var item in query)
-                    {
-                        Console.WriteLine(item.Name);
-                    }
-                    break;
+                        break;
 
-                case 2:
-                    try
-                    {
+                    case 2:
+                        try
+                        {
+                            // Create and save a new Blog
+                            Console.Write("Enter a name for a new Blog: ");
+                            string name = Console.ReadLine();
+
+                            var blog = new Blog { Name = name };
+
+                            db.AddBlog(blog);
+                            logger.Info("Blog added - {name}", name);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(ex.Message);
+                        }
+                        break;
+
+                    case 3:
+                        try
+                        {
                         // Create and save a new Blog
-                        Console.Write("Enter a name for a new Blog: ");
-                        var name = Console.ReadLine();
+                        Console.WriteLine("Select the blog you would like to post to: ");
+                        DisplayBlogs(db);
 
-                        var blog = new Blog { Name = name };
+                        int blogId = Int32.Parse(Console.ReadLine());
 
-                        db.AddBlog(blog);
-                        logger.Info("Blog added - {name}", name);
+                        var check = db.Blogs.Where(b => b.BlogId == blogId);
+                                                
+                        if (check.Count() == 1){
 
+                        } else {
+                            logger.Error("There are no Blogs saved with that ID");
+                        }
+
+                        string title = Console.ReadLine();
+
+                        string content = Console.ReadLine();
+
+                        var post = new Post {Title = title };
                         
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error(ex.Message);
-                    }
-                    break;
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(ex.Message);
+                        }
+                        break;
 
-                case 3:
+                    case 4:
 
-                    break;
-
-                case 4:
-
-                    break;
-
-
+                        break;
+                }
             }
-            }
-            
-
-
 
             logger.Info("Program ended");
         }
+
+        //needing to display the blogs is in more than one place 
+        private static void DisplayBlogs(BloggingContext db)
+        {
+            // Display all Blogs from the database
+            var query = db.Blogs.OrderBy(b => b.Name);
+
+            foreach (var item in query)
+            {
+                Console.WriteLine(item.BlogId + " - " + item.Name);
+            }
+        }
+
+
     }
 }
