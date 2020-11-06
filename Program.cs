@@ -54,26 +54,32 @@ namespace BlogsConsole
                     case 3:
                         try
                         {
-                        // Create and save a new Blog
-                        Console.WriteLine("Select the blog you would like to post to: ");
-                        DisplayBlogs(db);
+                            // Create and save a new Blog
+                            Console.WriteLine("Select the blog you would like to post to: ");
+                            DisplayBlogs(db);
 
-                        int blogId = Int32.Parse(Console.ReadLine());
+                            int blogId = Int32.Parse(Console.ReadLine());
 
-                        var check = db.Blogs.Where(b => b.BlogId == blogId);
-                                                
-                        if (check.Count() == 1){
+                            var check = db.Blogs.Where(b => b.BlogId == blogId);
 
-                        } else {
-                            logger.Error("There are no Blogs saved with that ID");
-                        }
+                            if (check.Count() == 1)
+                            {
+                                Console.WriteLine("Enter the post title: ");
+                                string title = Console.ReadLine();
+                                
+                                Console.WriteLine("Enter the post content:");
+                                string content = Console.ReadLine();
 
-                        string title = Console.ReadLine();
+                                var post = new Post { Title = title, Content = content, BlogId = blogId};
 
-                        string content = Console.ReadLine();
+                                db.AddPost(post);
+                                logger.Info("Post added - {title}", title);
+                            }
+                            else
+                            {
+                                logger.Error("There are no Blogs saved with that ID");
+                            }
 
-                        var post = new Post {Title = title };
-                        
                         }
                         catch (Exception ex)
                         {
