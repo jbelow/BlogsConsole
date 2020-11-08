@@ -110,6 +110,8 @@ namespace BlogsConsole
         //needing to display the blogs is in more than one place 
         private static void DisplayBlogs(BloggingContext db)
         {
+            int RecordTotals = db.Blogs.Count();
+            Console.WriteLine("There are " + RecordTotals + " blogs");
             // Display all Blogs from the database
             var query = db.Blogs.OrderBy(b => b.BlogId);
 
@@ -122,11 +124,13 @@ namespace BlogsConsole
         private static void DisplayPosts(BloggingContext db, int blogId)
         {
 
-            var query = db.Posts.Where(b => b.BlogId == blogId);
+            int RecordTotals = db.Posts.Count();
+            Console.WriteLine("There are " + RecordTotals + " posts");
+            var query = db.Posts.Where(p => p.BlogId == blogId);
 
             foreach (var item in query)
             {
-                Console.WriteLine("Post title: " + item.Title);
+                Console.WriteLine("Post title: " + item.Title +  "\nPost content: " + item.Content);
             }
         }
 
