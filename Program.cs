@@ -40,11 +40,17 @@ namespace BlogsConsole
                             Console.Write("Enter a name for a new Blog: ");
                             string name = Console.ReadLine();
 
-                            var blog = new Blog { Name = name };
+                            if (name != "")
+                            {
+                                var blog = new Blog { Name = name };
+                                db.AddBlog(blog);
+                                logger.Info("Blog added - {name}", name);
 
-                            db.AddBlog(blog);
-                            logger.Info("Blog added - {name}", name);
-
+                            }
+                            else
+                            {
+                                logger.Error("You did not add a name.");
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -66,14 +72,19 @@ namespace BlogsConsole
                             {
                                 Console.WriteLine("Enter the post title: ");
                                 string title = Console.ReadLine();
+                                if (title != "")
+                                {
+                                    Console.WriteLine("Enter the post content:");
+                                    string content = Console.ReadLine();
+                                    var post = new Post { Title = title, Content = content, BlogId = blogId };
 
-                                Console.WriteLine("Enter the post content:");
-                                string content = Console.ReadLine();
-
-                                var post = new Post { Title = title, Content = content, BlogId = blogId };
-
-                                db.AddPost(post);
-                                logger.Info("Post added - {title}", title);
+                                    db.AddPost(post);
+                                    logger.Info("Post added - {title}", title);
+                                }
+                                else
+                                {
+                                    logger.Error("You did not add a title.");
+                                }
                             }
                             else
                             {
@@ -92,9 +103,26 @@ namespace BlogsConsole
                         try
                         {
                             Console.WriteLine("Select the blog you would like to post to: ");
+                            Console.WriteLine("0 - to get all posts");
                             DisplayBlogs(db);
                             blogId = Int32.Parse(Console.ReadLine());
-                            DisplayPosts(db, blogId);
+
+                            if (blogId == 0)
+                            {
+                                int RecordTotals = db.Posts.Count();
+                                Console.WriteLine("There are " + RecordTotals + " posts");
+                                var query = db.Posts;
+
+                                foreach (var item in query)
+                                {
+                                    Console.WriteLine("Post title: " + item.Title + "\nPost content: " + item.Content + "\n Blog Title: " + item.Blog.Name);
+                                }
+                            }
+                            else
+                            {
+                                DisplayPosts(db, blogId);
+                            }
+
                         }
                         catch (Exception ex)
                         {
@@ -130,7 +158,7 @@ namespace BlogsConsole
 
             foreach (var item in query)
             {
-                Console.WriteLine("Post title: " + item.Title +  "\nPost content: " + item.Content);
+                Console.WriteLine("Post title: " + item.Title + "\nPost content: " + item.Content + "\nBlog Title: " + item.Blog.Name);
             }
         }
 
