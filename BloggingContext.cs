@@ -20,6 +20,13 @@ namespace BlogsConsole
             this.SaveChanges();
         }
 
+        public void EditBlog(Blog UpdatedBlog)
+        {
+            Blog blog = this.Blogs.Find(UpdatedBlog.BlogId);
+            blog.Name = UpdatedBlog.Name;
+            this.SaveChanges();
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfiguration config = new ConfigurationBuilder()
