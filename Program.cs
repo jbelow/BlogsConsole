@@ -75,14 +75,7 @@ namespace BlogsConsole
                         var blog = GetBlog(db);
                         if (blog != null)
                         {
-                            // input blog
-                            Blog UpdatedBlog = InputBlog(db);
-                            if (UpdatedBlog != null)
-                            {
-                                UpdatedBlog.BlogId = blog.BlogId;
-                                db.EditBlog(UpdatedBlog);
-                                logger.Info($"Blog (id: {blog.BlogId}) updated");
-                            }
+                            // TODO: input blog
                         }
                     }
                     Console.WriteLine();
